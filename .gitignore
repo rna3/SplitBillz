@@ -38,3 +38,6 @@ yarn-error.*
 
 # typescript
 *.tsbuildinfo
+
+# playground
+splitbill-backend/playground-1.mongodb.js
