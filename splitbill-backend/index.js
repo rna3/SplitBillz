@@ -27,16 +27,13 @@ mongoose.connection.on('disconnected', () => console.warn('Mongoose disconnected
 
 async function startServer() {
   try {
-    await mongoose.connect(process.env.MONGO_URI, {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    });
+    await mongoose.connect(uri);
     console.log('Connected to MongoDB Atlas!');
     app.listen(PORT, () => {
       console.log(`Server running on http://localhost:${PORT} in ${process.env.NODE_ENV || 'development'} mode`);
     });
   } catch (err) {
-    console.error('Error connecting to MongoDB:', err);
+    console.error('Error connecting to MongoDB:', err.message);
     process.exit(1);
   }
 }
