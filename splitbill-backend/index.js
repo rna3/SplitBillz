@@ -2,6 +2,12 @@ const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
 require('dotenv').config();
+const uri = process.env.MONGO_URI;
+
+//Debuggin Atlas connection
+console.log('MONGO_URI:', process.env.MONGO_URI); // Add this
+console.log('JWT_SECRET:', process.env.JWT_SECRET);
+console.log('PORT:', process.env.PORT);
 
 const authRoutes = require('./routes/auth');
 const groupRoutes = require('./routes/groups');
