@@ -12,6 +12,7 @@ console.log('PORT:', process.env.PORT);
 const authRoutes = require('./routes/auth');
 const groupRoutes = require('./routes/groups');
 const expenseRoutes = require('./routes/expenses');
+const userRoutes = require('./routes/users');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
@@ -26,6 +27,7 @@ app.get('/api/health', (req, res) => res.json({ status: 'ok' }));
 app.use('/api/auth', authRoutes);
 app.use('/api/groups', groupRoutes);
 app.use('/api/expenses', expenseRoutes);
+app.use('/api/users', userRoutes);
 
 // MongoDB Atlas connection
 mongoose.connection.on('error', err => console.error('Mongoose error:', err));

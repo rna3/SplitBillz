@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
-import { View, TextInput, Button, StyleSheet } from 'react-native';
+import { View, TextInput, Button, Text, StyleSheet } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 
 const AddExpenseScreen = ({ route, navigation }) => {
@@ -9,21 +10,33 @@ const AddExpenseScreen = ({ route, navigation }) => {
   const [error, setError] = useState('');
 
   const handleAddExpense = async () => {
+    // Validate inputs
+    if (!description.trim()) {
+      setError('Description is required');
+      return;
+    }
+    const parsedAmount = parseFloat(amount);
+    if (!amount || isNaN(parsedAmount) || parsedAmount <= 0) {
+      setError('Please enter a valid amount');
+      return;
+    }
+
     try {
-      // Simplified: assumes equal split among group members
+      const token = await AsyncStorage.getItem('token');
+      if (!token) {
+        setError('Please log in');
+        navigation.replace('Login');
+        return;
+      }
       await axios.post(
-        'http://localhost:5000/api/expenses',
-        {
-          description,
-          amount: parseFloat(amount),
-          groupId,
-          splits: [] // Add logic to split amount
-        },
-        { headers: { Authorization: `Bearer <your_token>` } }
+        `http://localhost:3000/api/expenses`,
+        { groupId, description, amount: parsedAmount },
+        { headers: { Authorization: `Bearer ${token}` } }
       );
-      navigation.goBack();
+      setError('');
+      navigation.navigate('Group', { groupId });
     } catch (err) {
-      setError(err.response.data.msg || 'Failed to add expense');
+      setError(err.response?.data?.msg || 'Failed to add expense');
     }
   };
 
@@ -49,9 +62,9 @@ const AddExpenseScreen = ({ route, navigation }) => {
 };
 
 const styles = StyleSheet.create({
-  container: { flex: 1, padding: 20 },
-  input: { borderWidth: 1, padding: 10, marginBottom: 10 },
-  error: { color: 'red', marginBottom: 10 }
+  container: { flex: 1, justifyContent: 'center', padding: 20 },
+  input: { borderWidth: 1, padding: 10, marginBottom: 10, borderRadius: 5 },
+  error: { color: 'red', marginBottom: 10, textAlign: 'center' }
 });
 
 export default AddExpenseScreen;

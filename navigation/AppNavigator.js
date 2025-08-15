@@ -9,9 +9,9 @@ import AddExpenseScreen from '../screens/AddExpenseScreen';
 
 const Stack = createStackNavigator();
 
-const AppNavigator = () => (
+const AppNavigator = ({ initialRouteName }) => (
   <NavigationContainer>
-    <Stack.Navigator initialRouteName="Login">
+    <Stack.Navigator initialRouteName={initialRouteName}>
       <Stack.Screen name="Login" component={LoginScreen} />
       <Stack.Screen name="Signup" component={SignupScreen} />
       <Stack.Screen name="Home" component={HomeScreen} />
