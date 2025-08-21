@@ -1,32 +1,29 @@
-import React, { useEffect, useState } from 'react';
-import { View, ActivityIndicator } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
-import AppNavigator from './navigation/AppNavigator';
+import React, { useEffect } from 'react';
+   import { View, StyleSheet } from 'react-native';
+   import AsyncStorage from '@react-native-async-storage/async-storage';
+   import AppNavigator from './navigation/AppNavigator';
 
-const App = () => {
-  const [isLoading, setIsLoading] = useState(true);
-  const [initialRoute, setInitialRoute] = useState('Login');
+   const App = () => {
+     useEffect(() => {
+       const checkToken = async () => {
+         const token = await AsyncStorage.getItem('token');
+         console.log('App.js: Initial token check:', token);
+       };
+       checkToken();
+     }, []);
 
-  useEffect(() => {
-    const checkToken = async () => {
-      const token = await AsyncStorage.getItem('token');
-      if (token) {
-        setInitialRoute('Home');
-      }
-      setIsLoading(false);
-    };
-    checkToken();
-  }, []);
+     return (
+       <View style={styles.container}>
+         <AppNavigator />
+       </View>
+     );
+   };
 
-  if (isLoading) {
-    return (
-      <View style={{ flex: 1, justifyContent: 'center', alignItems: 'center' }}>
-        <ActivityIndicator size="large" />
-      </View>
-    );
-  }
+   const styles = StyleSheet.create({
+     container: {
+       flex: 1,
+       backgroundColor: '#fff'
+     }
+   });
 
-  return <AppNavigator initialRouteName={initialRoute} />;
-};
-
-export default App;
+   export default App;
