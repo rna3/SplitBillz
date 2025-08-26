@@ -18,7 +18,8 @@ const app = express();
 const PORT = process.env.PORT || 3000;
 
 // Middleware
-app.use(cors({ origin: 'http://localhost:19006' }));
+app.use(cors({ origin: ['http://localhost:19006', 'https://splitbillapp.vercel.app'],
+  credentials: true }));
 app.use(express.json());
 
 // Routes

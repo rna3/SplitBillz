@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-   import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
-   import AsyncStorage from '@react-native-async-storage/async-storage';
-   import axios from 'axios';
+import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import axios from 'axios';
 
    const LoginScreen = ({ navigation }) => {
      const [email, setEmail] = useState('');
