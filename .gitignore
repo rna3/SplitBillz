@@ -41,3 +41,4 @@ yarn-error.*
 
 # playground
 splitbill-backend/playground-1.mongodb.js
+.vercel

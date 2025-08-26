@@ -1,0 +1,18 @@
+{
+     "version": 2,
+     "builds": [
+       {
+         "src": "web-build/**",
+         "use": "@vercel/static"
+       }
+     ],
+     "routes": [
+       {
+         "src": "/(.*)",
+         "dest": "/web-build/$1",
+         "headers": {
+           "Cache-Control": "public, max-age=0, must-revalidate"
+         }
+       }
+     ]
+   }

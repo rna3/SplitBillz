@@ -1,14 +1,23 @@
 {
   "expo": {
-    "name": "SplitBill",
-    "slug": "splitbill",
+    "name": "SplitBillApp",
+    "slug": "SplitBillApp",
     "version": "1.0.0",
-    "platforms": ["ios", "android", "web"],
-    "ios": {
-      "bundleIdentifier": "com.yourname.splitbill"
+    "orientation": "portrait",
+    "icon": "./assets/icon.png",
+    "splash": {
+      "image": "./assets/splash.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#ffffff"
     },
+    "updates": {
+      "fallbackToCacheTimeout": 0
+    },
+    "assetBundlePatterns": ["**/*"],
     "web": {
-      "bundler": "webpack"
+      "bundler": "metro",
+      "output": "static",
+      "favicon": "./assets/favicon.png"
     }
   }
 }
