@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
    import { View, Text, FlatList, Pressable, StyleSheet, Alert } from 'react-native';
    import AsyncStorage from '@react-native-async-storage/async-storage';
    import axios from 'axios';
+   import { API_URL } from '@env';
 
    const HomeScreen = ({ navigation }) => {
      const [groups, setGroups] = useState([]);
@@ -25,7 +26,7 @@ import React, { useState, useEffect } from 'react';
 
            // Fetch current user
            console.log('HomeScreen: Fetching current user with token:', token);
-           const userRes = await axios.get('http://localhost:3000/api/users/me', {
+           const userRes = await axios.get(`${API_URL}/api/auth/users/me`, {
              headers: { Authorization: `Bearer ${token}` }
            });
            console.log('HomeScreen: Current user:', userRes.data);
@@ -33,7 +34,7 @@ import React, { useState, useEffect } from 'react';
 
            // Fetch groups
            console.log('HomeScreen: Fetching groups');
-           const res = await axios.get('http://localhost:3000/api/groups', {
+           const res = await axios.get(`${API_URL}/api/groups`, {
              headers: { Authorization: `Bearer ${token}` }
            });
            console.log('HomeScreen: Groups fetched:', res.data.map(g => ({
@@ -84,13 +85,13 @@ import React, { useState, useEffect } from 'react';
        try {
          const token = await AsyncStorage.getItem('token');
          console.log('HomeScreen: Deleting group:', groupId, 'by user:', currentUserId);
-         await axios.delete(`http://localhost:3000/api/groups/${groupId}`, {
+         await axios.delete(`${API_URL}/api/groups/${groupId}`, {
            headers: { Authorization: `Bearer ${token}` }
          });
          console.log('HomeScreen: Group deleted successfully:', groupId);
          Alert.alert('Success', 'Group deleted');
          // Refetch groups
-         const res = await axios.get('http://localhost:3000/api/groups', {
+         const res = await axios.get(`${API_URL}/api/groups`, {
            headers: { Authorization: `Bearer ${token}` }
          });
          console.log('HomeScreen: Groups refetched after delete:', res.data);

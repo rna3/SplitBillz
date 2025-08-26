@@ -3,6 +3,7 @@ import { View, Text, TextInput, Pressable, FlatList, StyleSheet, Dimensions, Ale
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
 import { PieChart } from 'react-native-chart-kit';
+import { API_URL } from '@env';
 
 const GroupScreen = ({ route, navigation }) => {
   const { groupId } = route.params || {};
@@ -32,7 +33,7 @@ const GroupScreen = ({ route, navigation }) => {
 
         // Fetch current user
         console.log('GroupScreen: Fetching current user');
-        const userRes = await axios.get('http://localhost:3000/api/users/me', {
+        const userRes = await axios.get(`${API_URL}/api/users/me`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         console.log('GroupScreen: Current user:', userRes.data);
@@ -40,7 +41,7 @@ const GroupScreen = ({ route, navigation }) => {
 
         // Fetch available users
         console.log('GroupScreen: Fetching available users');
-        const usersRes = await axios.get('http://localhost:3000/api/users', {
+        const usersRes = await axios.get(`${API_URL}/api/users`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         console.log('GroupScreen: Available users:', usersRes.data);
@@ -49,7 +50,7 @@ const GroupScreen = ({ route, navigation }) => {
         // Fetch group details if groupId exists
         if (groupId) {
           console.log('GroupScreen: Fetching group:', groupId);
-          const groupRes = await axios.get(`http://localhost:3000/api/groups/${groupId}`, {
+          const groupRes = await axios.get(`${API_URL}/api/groups/${groupId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           console.log('GroupScreen: Group fetched:', groupRes.data);
@@ -59,7 +60,7 @@ const GroupScreen = ({ route, navigation }) => {
           setSelectedUsers(groupRes.data.members.map(member => member._id));
 
           console.log('GroupScreen: Fetching expenses for group:', groupId);
-          const expensesRes = await axios.get(`http://localhost:3000/api/expenses/group/${groupId}`, {
+          const expensesRes = await axios.get(`${API_URL}/api/expenses/group/${groupId}`, {
             headers: { Authorization: `Bearer ${token}` }
           });
           const fetchedExpenses = expensesRes.data || [];
@@ -124,12 +125,12 @@ const GroupScreen = ({ route, navigation }) => {
       const payload = { name, description, members: selectedUsers };
       let res;
       if (groupId) {
-        res = await axios.put(`http://localhost:3000/api/groups/${groupId}`, payload, {
+        res = await axios.put(`${API_URL}/api/groups/${groupId}`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
         console.log('GroupScreen: Group updated:', res.data);
       } else {
-        res = await axios.post('http://localhost:3000/api/groups', payload, {
+        res = await axios.post(`${API_URL}/api/groups`, payload, {
           headers: { Authorization: `Bearer ${token}` }
         });
         console.log('GroupScreen: Group created:', res.data);
@@ -153,13 +154,13 @@ const GroupScreen = ({ route, navigation }) => {
     try {
       const token = await AsyncStorage.getItem('token');
       console.log('GroupScreen: Deleting expense:', expenseId);
-      await axios.delete(`http://localhost:3000/api/expenses/${expenseId}`, {
+      await axios.delete(`${API_URL}/api/expenses/${expenseId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log('GroupScreen: Expense deleted:', expenseId);
       Alert.alert('Success', 'Expense deleted');
       // Refetch expenses
-      const expensesRes = await axios.get(`http://localhost:3000/api/expenses/group/${groupId}`, {
+      const expensesRes = await axios.get(`${API_URL}/api/expenses/group/${groupId}`, {
         headers: { Authorization: `Bearer ${token}` }
       });
       const fetchedExpenses = expensesRes.data || [];

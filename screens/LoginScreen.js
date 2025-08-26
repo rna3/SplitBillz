@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { API_URL } from '@env';
 
    const LoginScreen = ({ navigation }) => {
      const [email, setEmail] = useState('');
@@ -11,7 +12,7 @@ import axios from 'axios';
      const handleLogin = async () => {
        console.log('Login attempted:', { email });
        try {
-         const res = await axios.post('http://localhost:3000/api/auth/login', {
+         const res = await axios.post(`${API_URL}/api/auth/login`, {
            email,
            password
          });

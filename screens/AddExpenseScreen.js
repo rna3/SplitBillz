@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { View, Text, TextInput, Pressable, FlatList, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { API_URL } from '@env';
 
 const AddExpenseScreen = ({ route, navigation }) => {
   const { groupId } = route.params || {};
@@ -28,7 +29,7 @@ const AddExpenseScreen = ({ route, navigation }) => {
 
         // Fetch group members
         console.log('AddExpenseScreen: Fetching group:', groupId);
-        const groupRes = await axios.get(`http://localhost:3000/api/groups/${groupId}`, {
+        const groupRes = await axios.get(`${API_URL}/api/groups/${groupId}`, {
           headers: { Authorization: `Bearer ${token}` }
         });
         console.log('AddExpenseScreen: Group fetched:', groupRes.data);
@@ -182,7 +183,7 @@ const AddExpenseScreen = ({ route, navigation }) => {
         groupId
       };
       console.log('AddExpenseScreen: Adding expense with payload:', JSON.stringify(payload, null, 2));
-      const res = await axios.post('http://localhost:3000/api/expenses', payload, {
+      const res = await axios.post(`${API_URL}/api/expenses`, payload, {
         headers: { Authorization: `Bearer ${token}` }
       });
       console.log('AddExpenseScreen: Expense added:', res.data);

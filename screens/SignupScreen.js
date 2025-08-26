@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, TextInput, Pressable, StyleSheet, Alert } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import axios from 'axios';
+import { API_URL} from '@env';
 
 const SignupScreen = ({ navigation }) => {
   const [name, setName] = useState('');
@@ -12,7 +13,7 @@ const SignupScreen = ({ navigation }) => {
   const handleSignup = async () => {
     console.log('Signup attempted:', { name, email });
     try {
-      const res = await axios.post('http://localhost:3000/api/auth/signup', {
+      const res = await axios.post(`${API_URL}/api/auth/signup`, {
         name,
         email,
         password
