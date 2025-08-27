@@ -26,7 +26,7 @@ const allowedOrigins = process.env.ALLOWED_ORIGINS
       'http://localhost:8081',
       'http://localhost:19006',
       'https://split-billz.vercel.app',
-      'https://split-billz-c4joa91mj-rna3s-projects.vercel.app',
+      'https://split-billz-q4cq60r83-rna3s-projects.vercel.app/',
     ];
 
 app.use(
