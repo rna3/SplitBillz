@@ -26,7 +26,7 @@ import React, { useState, useEffect } from 'react';
 
            // Fetch current user
            console.log('HomeScreen: Fetching current user with token:', token);
-           const userRes = await axios.get(`${API_URL}/api/auth/users/me`, {
+           const userRes = await axios.get(`${API_URL}/api/users/me`, {
              headers: { Authorization: `Bearer ${token}` }
            });
            console.log('HomeScreen: Current user:', userRes.data);
