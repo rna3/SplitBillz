@@ -20,7 +20,7 @@ const SignupScreen = ({ navigation }) => {
       if (!API_URL) {
         throw new Error('API_URL is not defined');
       }
-      const res = await axios.post(`${API_URL}/api/auth/register`, { name, email, password });
+      const res = await axios.post(`${API_URL}/api/auth/signup`, { name, email, password });
       console.log('SignupScreen: Signup response:', res.data);
       await AsyncStorage.setItem('token', res.data.token);
       console.log('SignupScreen: Token stored:', res.data.token);
@@ -32,8 +32,9 @@ const SignupScreen = ({ navigation }) => {
         data: err.response?.data,
         message: err.message
       });
-      setError(err.response?.data?.msg || 'Signup failed');
-      Alert.alert('Error', err.response?.data?.msg || 'Signup failed');
+      const message = err.response?.data?.error || 'Signup failed';
+      setError(message);
+      Alert.alert('Error', message);
     }
   };
 
