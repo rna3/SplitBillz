@@ -20,34 +20,45 @@ const PORT = process.env.PORT || 3000;
 /** ---------------------------
  *   CORS CONFIGURATION
  * --------------------------- */
-const allowedOrigins = process.env.ALLOWED_ORIGINS
+const normalizeOrigin = (origin = '') => origin.trim().replace(/\/$/, '');
+
+const allowedOrigins = (process.env.ALLOWED_ORIGINS
   ? process.env.ALLOWED_ORIGINS.split(',')
   : [
       'http://localhost:8081',
       'http://localhost:19006',
       'https://split-billz.vercel.app',
-      'https://split-billz-q4cq60r83-rna3s-projects.vercel.app/',
-    ];
+      'https://split-billz-q4cq60r83-rna3s-projects.vercel.app',
+    ])
+  .map(normalizeOrigin)
+  .filter(Boolean);
 
-app.use(
-  cors({
-    origin: function (origin, callback) {
-      // allow requests with no origin (like mobile apps or curl)
-      if (!origin) return callback(null, true);
-      if (allowedOrigins.includes(origin)) {
-        return callback(null, true);
-      } else {
-        return callback(new Error('CORS not allowed for this origin: ' + origin), false);
-      }
-    },
-    methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
-    credentials: true,
-  })
-);
+const corsOptions = {
+  origin: function (origin, callback) {
+    if (!origin) {
+      return callback(null, true);
+    }
 
-// Handle preflight requests for all routes
-app.options('*', cors());
+    const normalizedOrigin = normalizeOrigin(origin);
+
+    const isExplicitlyAllowed = allowedOrigins.includes(normalizedOrigin);
+    const isVercelPreview = /^https?:\/\/[\w-]+\.vercel\.app$/.test(normalizedOrigin);
+
+    if (isExplicitlyAllowed || isVercelPreview) {
+      return callback(null, true);
+    }
+
+    return callback(new Error('CORS not allowed for this origin: ' + origin), false);
+  },
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+  credentials: true,
+};
+
+app.use(cors(corsOptions));
+
+// Handle preflight requests for all routes with the same options
+app.options('*', cors(corsOptions));
 
 app.use(express.json());
 
